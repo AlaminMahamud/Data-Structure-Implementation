@@ -1,0 +1,18 @@
+Stack Intro.txt
+
+1. Sometimes called Push Down List
+2. LIFO
+
+Variables 
+
+1. top
+2. arraylimit
+
+Methods
+
+1. Push
+2. Peek
+3. Pop
+
+
+

@@ -1,0 +1,9 @@
+1. Stack Intro
+2. parenthesis matching
+3. Stack as an Abstract Data Type
+4. Stack in C
+5. Top Variable
+6. Empty Function
+7. Pop Function
+8. Push Function
+9. Underflow and Overflow

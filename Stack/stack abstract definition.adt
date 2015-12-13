@@ -1,0 +1,26 @@
+/// Stack as an abstract data type
+
+
+// stack declaration in abstract
+// type definition of stack
+	abstract type def <<eltype>> Stack(eltype);
+
+// empty the stack 
+	abstract empty(s);
+	// declaring stack in calling code 
+	stack<eltype> s;
+	postcondition empty == (len(s) == 0) 
+	
+//  creating abstract pop method
+	abstract eltype pop(s)
+	stack(eltype) s;
+	precondition empty(s) == false;
+	postcondition pop == first(s')
+				  s == sub(s',1,len(s')-1)
+				  
+//  creating abstract push method
+	abstract push (s,eltype)
+	stack(eltype) s;
+	postcondition s == <eltype> + s'
+	
+	
