@@ -1,4 +1,4 @@
-nstruct node
+struct node
 {
  int roll;
  node *next;
