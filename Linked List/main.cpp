@@ -6,14 +6,14 @@ struct node
 	struct node *next;
 };
 
-node *root = null;
+node *root = NULL;
 
 
 
 void print()
 {
 	node *current = root;
-	while(current->next != null)
+	while(current->next != NULL)
 	{
 		printf("%d\n",current->roll);
 		current = current->next;
@@ -22,33 +22,33 @@ void print()
 
 void append(int roll)
 {
-	if(root == null)
+	if(root == NULL)
 	{
 		root = new node();
-		root->next = null;
+		root->next = NULL;
 	}
 	else
 	{
 		node * current = root;
-		while(current->next!=null)
+		while(current->next!=NULL)
 		{
 			current = current->next;
 		}
 
 		node *newnode = new node();
 		newnode->roll = roll;
-		newnode->next = null;
+		newnode->next = NULL;
 
-		current_node->next = newnode;
+		current->next = newnode;
 	}
 }
 
 int main()
 {
-	append(1);
-	append(2);
-	append(3);
-	append(4);
+	append(10);
+	append(20);
+	append(30);
+	append(40);
 	print();
 	return 0;
 }
