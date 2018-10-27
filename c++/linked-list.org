@@ -1,0 +1,576 @@
+* Singly Linked List
+Create a Node
+#+BEGIN_SRC cpp
+  struct node{
+      int data;
+      struct node *next;
+  };
+#+END_SRC
+
+simple singly linked list
+#+BEGIN_SRC cpp
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+
+struct node{
+    int data;
+    struct node *next;
+};
+
+
+int main(){
+    struct node * head   = NULL;
+    struct node * second  = NULL;
+    struct node * third = NULL;
+
+    head = (struct node*) malloc(sizeof(struct node));
+    second = (struct node*) malloc(sizeof(struct node));
+    third = (struct node*) malloc(sizeof(struct node));
+
+    head->data = 1;
+    head->next = second;
+    second->data = 2;
+    second->next = third;
+    third->data = 3;
+    third->next = NULL;
+    return 0;
+}
+#+END_SRC
+
+linked list traverse
+#+BEGIN_SRC cpp
+
+void print_linked_list(struct node * head){
+
+    struct node * temp = head;
+    while(temp != NULL){
+	printf("%d->", temp->data);
+	temp = temp->next;
+    }
+    printf("\n");
+}
+#+END_SRC
+
+inserting node at first
+#+BEGIN_SRC cpp
+struct node * insert_node_at_first(struct node * head, int data){
+    struct node * temp = (struct node *) malloc(sizeof (struct node));
+    temp->data = data;
+    temp->next = head;
+    return temp;
+}
+
+#+END_SRC
+
+inserting node at last
+#+BEGIN_SRC cpp
+void insert_node_at_last(
+    struct node * head,
+    int data
+    ){
+
+    struct node * temp = head;
+    struct node * new_node = (struct node *) malloc(sizeof(struct node));
+    new_node->data = data;
+    new_node->next = NULL;
+    while(temp->next != NULL){
+	temp = temp->next;
+	if(temp->next == NULL){
+	    temp->next = new_node;
+	    break;
+	}
+    }
+}
+
+#+END_SRC
+
+inserting node at middle before
+#+BEGIN_SRC cpp
+void insert_node_at_middle_before(struct node * head, struct node* point, int data){
+    struct node * temp = head;
+    struct node * new_node = (struct node*)malloc(sizeof(struct node));
+    new_node -> data = data;
+
+    while(temp->next != NULL){
+	if(temp->next->data ==  point->data){
+	    struct node * temp2 = temp->next;
+	    temp->next = new_node;
+	    new_node->next = temp2;
+	    break;
+	}
+	temp = temp->next;
+    }
+}
+#+END_SRC
+
+inserting node at middle after
+#+BEGIN_SRC cpp
+void insert_node_at_middle_after(struct node* point, int data){
+    struct node * temp = (struct node *)malloc(sizeof(struct node));
+    temp->data = data;
+    temp->next = NULL;
+    struct node * temp2 = point->next;
+    point->next = temp;
+    temp->next = temp2;
+}
+
+#+END_SRC
+
+delete a node given key
+#+BEGIN_SRC cpp
+struct node * delete_node_given_key(struct node * head, int data){
+    struct node * temp = head;
+    struct node * prev = head;
+
+    // base case
+    if(head->data == data){
+	head = head->next;
+	free(temp);
+	return head;
+    }
+
+    temp = temp->next;
+
+    while(temp != NULL){
+	// 1->2->3->4
+	if(temp->data == data){
+	    prev->next = temp->next;
+	    free(temp);
+	}
+	prev = temp;
+	temp = temp->next;
+    }
+    return head;
+}
+#+END_SRC
+
+alternate push method
+#+BEGIN_SRC cpp
+  #include <iostream>
+  #include <cstdlib>
+
+  using namespace std;
+
+  struct node {
+      int data;
+      struct node * next;
+  };
+
+
+  void push(struct node ** head_ref, int data){
+      struct node *new_node = (struct node *)malloc(sizeof(struct node));
+      struct node *temp = (*head_ref);
+      new_node -> data = data;
+      new_node -> next = NULL;
+
+
+      while(temp->next != NULL){
+	  temp = temp->next;
+      }
+      temp->next = new_node;
+  }
+
+
+  void print_linked_list(struct node * head){
+
+      struct node * temp = head;
+      while(temp != NULL){
+	  printf("%d->", temp->data);
+	  temp = temp->next;
+      }
+      printf("\n");
+  }
+
+
+  int main(){
+
+      struct node * head   = NULL;
+      struct node * second  = NULL;
+      struct node * third = NULL;
+
+      head = (struct node*) malloc(sizeof(struct node));
+      second = (struct node*) malloc(sizeof(struct node));
+      third = (struct node*) malloc(sizeof(struct node));
+
+      head->data = 1;
+      head->next = second;
+      second->data = 2;
+      second->next = third;
+      third->data = 3;
+      third->next = NULL;
+
+      printf("before deleting node");
+      cout << endl;
+      print_linked_list(head);
+      push(&head, 10);
+      push(&head, 11);
+      push(&head, 12);
+      push(&head, 13);
+      printf("after deleting node");
+      cout << endl;
+      print_linked_list(head);
+
+
+      return 0;
+  }
+#+END_SRC
+
+delete a linked list at a given position
+#+BEGIN_SRC cpp
+/* Given a reference (pointer to pointer) to the head of a list
+   and a position, deletes the node at the given position */
+void deleteNode(struct Node **head_ref, int position)
+{
+   // If linked list is empty
+   if (*head_ref == NULL)
+      return;
+
+   // Store head node
+   struct Node* temp = *head_ref;
+
+    // If head needs to be removed
+    if (position == 0)
+    {
+        *head_ref = temp->next;   // Change head
+        free(temp);               // free old head
+        return;
+    }
+
+    // Find previous node of the node to be deleted
+    for (int i=0; temp!=NULL && i<position-1; i++)
+         temp = temp->next;
+
+    // If position is more than number of ndoes
+    if (temp == NULL || temp->next == NULL)
+         return;
+
+    // Node temp->next is the node to be deleted
+    // Store pointer to the next of node to be deleted
+    struct Node *next = temp->next->next;
+
+    // Unlink the node from linked list
+    free(temp->next);  // Free memory
+
+    temp->next = next;  // Unlink the deleted node from list
+}
+#+END_SRC
+
+delete a linked list
+#+BEGIN_SRC cpp
+void delete_linked_list(struct node * head){
+  struct node * temp = head, *house_keeping=NULL;
+  while(temp!=NULL){
+    house_keeping = temp;
+    temp = temp->next;
+    free(house_keeping);
+  }
+}
+
+#+END_SRC
+
+find length of a linked list
+#+BEGIN_SRC cpp
+int length_of_linked_list(struct node * head){
+  int len = 0;
+  struct node * temp = head;
+  while(temp != NULL){
+    len++;
+    temp = temp->next;
+  }
+  return len;
+}
+
+#+END_SRC
+
+
+find length in recursive
+#+BEGIN_SRC cpp
+int length_recursive(struct node * head){
+  if(head == NULL) return 0;
+  return 1 + length_recursive(head->next);
+}
+
+#+END_SRC
+
+search an element iterative
+#+BEGIN_SRC cpp
+/* Checks whether the value x is present in linked list */
+bool search(struct Node* head, int x)
+{
+    struct Node* current = head;  // Initialize current
+    while (current != NULL)
+    {
+        if (current->key == x)
+            return true;
+        current = current->next;
+    }
+    return false;
+}
+#+END_SRC
+
+
+search an element recursive
+#+BEGIN_SRC cpp
+/* Checks whether the value x is present in linked list */
+bool search(struct Node* head, int x)
+{
+    // Base case
+    if (head == NULL)
+        return false;
+
+    // If key is present in current node, return true
+    if (head->key == x)
+        return true;
+
+    // Recur for remaining list
+    return search(head->next, x);
+}
+#+END_SRC
+
+find a loop
+#+BEGIN_SRC cpp
+  bool find_loop(struct node * head){
+       bool i[100];
+       memset(i, false, sizeof(i));
+       struct node * temp = head;
+       while( temp != NULL){
+	    if(i[temp->data]) return true;
+	    i[temp->data] = true;
+	    temp = temp->next;
+       }
+       return false;
+  }
+#+END_SRC
+
+
+find length of loop
+#+BEGIN_SRC cpp
+  int find_length_in_loop(struct node * head){
+       int i[100];
+       memset(i, 0, sizeof(i));
+
+       struct node * temp = head;
+       int count = 0;
+       while(temp != NULL){
+	    ++count;
+	    if(i[temp->data] > 0) return count - i[temp->data];
+	    i[temp->data] = count;
+	    temp = temp->next;
+       }
+       return 0;
+
+  }
+#+END_SRC
+
+
+middle node using fast pointer
+#+BEGIN_SRC cpp
+void middle_node_fast_pointer(struct node * head){
+  struct node * fast = head;
+  struct node * slow = head;
+
+  if(head != NULL){
+    while((fast != NULL && fast->next != NULL)){
+      fast = fast->next->next;
+      slow = slow->next;
+    }
+    printf("%d\n", slow->data);
+  }
+}
+
+#+END_SRC
+
+
+middle node using n/2
+#+BEGIN_SRC cpp
+struct node * middle_node_n2 (struct node * head){
+  int length = get_count(head) / 2;
+  printf("%d\n", length);
+  struct node * temp = head;
+  while(length > 0){
+    temp = temp->next;
+    length--;
+  }
+  return temp;
+}
+
+#+END_SRC
+
+remove duplicates from sorted list
+#+BEGIN_SRC cpp
+/* The function removes duplicates from a sorted list */
+void removeDuplicates(struct Node* head)
+{
+    /* Pointer to traverse the linked list */
+    struct Node* current = head;
+
+    /* Pointer to store the next pointer of a node to be deleted*/
+    struct Node* next_next;
+
+    /* do nothing if the list is empty */
+    if (current == NULL)
+       return;
+
+    /* Traverse the list till last node */
+    while (current->next != NULL)
+    {
+       /* Compare current node with next node */
+       if (current->data == current->next->data)
+       {
+           /* The sequence of steps is important*/
+           next_next = current->next->next;
+           free(current->next);
+           current->next = next_next;
+       }
+       else /* This is tricky: only advance if no deletion */
+       {
+          current = current->next;
+       }
+    }
+}
+#+END_SRC
+
+compare list
+#+BEGIN_SRC cpp
+bool compare_list(struct node * temp1, struct node * temp2){
+  while(temp1 && temp2){
+    if(temp1->data == temp2->data){
+      temp1 = temp1->next;
+      temp2 = temp2->next;
+    }else
+      return false;
+  }
+
+  if(temp1==NULL && temp2==NULL){
+    return true;
+  }
+
+  return false;
+}
+
+#+END_SRC
+
+
+reverse
+#+BEGIN_SRC cpp
+struct node * reverse_copy (struct node * head){
+  struct node * first = NULL;
+  struct node * current = head;
+  struct node * last = NULL;
+
+  while(current != NULL){
+    last = current->next;
+    current->next = first;
+    first = current;
+    current = last;
+  }
+  //print_linked_list(first);
+  return first;
+}
+
+#+END_SRC
+
+
+reverse
+#+BEGIN_SRC cpp
+void reverse (struct node ** head){
+  struct node * first = NULL;
+  struct node * current = *head;
+  struct node * last = NULL;
+
+  while(current != NULL){
+    last = current->next;
+    current->next = first;
+    first = current;
+    current = last;
+  }
+  *head = first;
+
+}
+
+#+END_SRC
+
+remove duplicates from unsorted list
+#+BEGIN_SRC cpp
+/* Function to remove duplicates from a
+   unsorted linked list */
+void removeDuplicates(struct Node *start)
+{
+    struct Node *ptr1, *ptr2, *dup;
+    ptr1 = start;
+
+    /* Pick elements one by one */
+    while (ptr1 != NULL && ptr1->next != NULL)
+    {
+        ptr2 = ptr1;
+
+        /* Compare the picked element with rest
+           of the elements */
+        while (ptr2->next != NULL)
+        {
+            /* If duplicate then delete it */
+            if (ptr1->data == ptr2->next->data)
+            {
+                /* sequence of steps is important here */
+                dup = ptr2->next;
+                ptr2->next = ptr2->next->next;
+                delete(dup);
+            }
+            else /* This is tricky */
+                ptr2 = ptr2->next;
+        }
+        ptr1 = ptr1->next;
+    }
+}
+#+END_SRC
+
+swap nodes
+#+BEGIN_SRC cpp
+
+/* Function to swap nodes x and y in linked list by
+   changing links */
+void swapNodes(struct Node **head_ref, int x, int y)
+{
+   // Nothing to do if x and y are same
+   if (x == y) return;
+
+   // Search for x (keep track of prevX and CurrX
+   struct Node *prevX = NULL, *currX = *head_ref;
+   while (currX && currX->data != x)
+   {
+       prevX = currX;
+       currX = currX->next;
+   }
+
+   // Search for y (keep track of prevY and CurrY
+   struct Node *prevY = NULL, *currY = *head_ref;
+   while (currY && currY->data != y)
+   {
+       prevY = currY;
+       currY = currY->next;
+   }
+
+   // If either x or y is not present, nothing to do
+   if (currX == NULL || currY == NULL)
+       return;
+
+   // If x is not head of linked list
+   if (prevX != NULL)
+       prevX->next = currY;
+   else // Else make y as new head
+       *head_ref = currY;
+
+   // If y is not head of linked list
+   if (prevY != NULL)
+       prevY->next = currX;
+   else  // Else make x as new head
+       *head_ref = currX;
+
+   // Swap next pointers
+   struct Node *temp = currY->next;
+   currY->next = currX->next;
+   currX->next  = temp;
+}
+#+END_SRC

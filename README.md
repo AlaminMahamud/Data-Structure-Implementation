@@ -1,2 +1,4 @@
-# Data-Structures-C-Sharp
-all possible common data structures are implemented here in C Sharp
+Data Structures
+===============
+1. TREE
+2. GRAPH
